@@ -8,7 +8,7 @@ const TMDB_API_BASE_URL = 'https://api.themoviedb.org/3';
 async function getLatestMovies() {
   const res = await fetch(
     `${TMDB_API_BASE_URL}/movie/now_playing?api_key=${TMDB_API_KEY}&language=pt-BR&page=1`,
-    { next: { revalidate: 60 * 60 } } // Cache por 1 hora
+    { next: { revalidate: 60 * 60 } }
   );
 
   if (!res.ok) {
@@ -19,9 +19,9 @@ async function getLatestMovies() {
   return data.results;
 }
 
-// Componente principal da Home (Server Component)
+
 export default async function Home() {
   const movies = await getLatestMovies();
-
+  console.log(movies)
   return <MovieList movies={movies} />;
 }
