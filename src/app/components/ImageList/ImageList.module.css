@@ -1,49 +1,9 @@
-.container {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-  background: #030014;
-}
-
-.title {
-  font-size: 32px;
-  margin-bottom: 24px;
-  text-align: center;
-  color: #fff;
-}
-
 .list {
-  list-style: none;
   display: flex;
+  gap: 16px;
   flex-wrap: wrap;
-  gap: 30px;
-  padding: 0;
-  margin: 0;
-  justify-content: center;
 }
 
-.listItem {
-  padding: 10px;
-  border-radius: 10px;
+.item {
   text-align: center;
-  background-color: #fafafa;
-  cursor: pointer;
-  width: 240px;
-  flex-shrink: 0;
-  background: #0f0d23;
-  box-shadow: 0 0 #0000;
-  color: #fff;
-}
-
-.listItem:hover {
-  box-shadow: rgba(223, 223, 238, 0.2) 0px 7px 29px 0px;
-}
-
-.movieTitle {
-  font-size: 16px;
-  margin: 8px 0;
-  height: 40px;
-  /* limita altura para títulos maiores */
-  overflow: hidden;
-  text-overflow: ellipsis;
 }

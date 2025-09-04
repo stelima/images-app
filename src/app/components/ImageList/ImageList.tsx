@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import styles from './ImageList.module.css';
 
 interface ImageUrls {
   small: string;
@@ -8,6 +9,7 @@ interface ImageUrls {
 export interface ImageItem {
   id: string;
   urls: ImageUrls;
+  alt_description: string;
 }
 
 interface ImageListProps {
@@ -16,20 +18,17 @@ interface ImageListProps {
 
 export default function ImageList({ images }: ImageListProps) {
   return (
-    <>
-      <div>Images</div>
-      <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-        {images.map((image) => (
-          <div key={image.id} style={{ textAlign: 'center' }}>
-            <Image
-              alt=''
-              src={image.urls.small}
-              width={150}
-              height={150}
-            />
-          </div>
-        ))}
-      </div>
-    </>
+    <div className={styles.list}>
+      {images.map((image) => (
+        <div key={image.id} className={styles.item}>
+          <Image
+            alt={image.alt_description}
+            src={image.urls.small}
+            width={150}
+            height={150}
+          />
+        </div>
+      ))}
+    </div>
   );
 }

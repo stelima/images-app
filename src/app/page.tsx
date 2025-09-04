@@ -1,26 +1,62 @@
-import React from 'react';
-import ImageList from './components/ImageList/ImageList';
+'use client';
 
-const API_KEY = 'l7UE_2KrGzTtJIY3Q9kzYygrIHUGTcL_9e86b0TB95k'
+import React, { useEffect, useState } from 'react';
+import ImageList, { ImageItem } from './components/ImageList/ImageList';
+import PaginationMUI from './components/ImageList/Pagination';
+import { Container, Typography, CircularProgress, Box } from '@mui/material';
+import styles from './page.module.css';
 
-async function getLatestImages() {
-  const res = await fetch(
-    `https://api.unsplash.com/photos/?client_id=${API_KEY}`,
+const API_KEY = process.env.NEXT_PUBLIC_UNSPLASH_API_KEY;
+const IMAGES_PER_PAGE = 10;
+const TOTAL_IMAGES = 50;
+const TOTAL_PAGES = TOTAL_IMAGES / IMAGES_PER_PAGE;
 
-    { next: { revalidate: 60 * 60 } }
+export default function Home() {
+  const [images, setImages] = useState<ImageItem[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+
+  const fetchImages = async (page: number) => {
+    setLoading(true);
+    try {
+      const res = await fetch(
+        `https://api.unsplash.com/photos?page=${page}&per_page=${IMAGES_PER_PAGE}&client_id=${API_KEY}`
+      );
+      if (!res.ok) throw new Error('Failed to fetch images');
+      const data: ImageItem[] = await res.json();
+      setImages(data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchImages(currentPage);
+  }, [currentPage]);
+
+  return (
+    <Container className={styles.container}>
+      <Typography variant="h4" gutterBottom>
+        Latest Images
+      </Typography>
+
+      {loading ? (
+        <Box className={styles.loader}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <ImageList images={images} />
+      )}
+
+      <Box className={styles.pagination}>
+        <PaginationMUI
+          page={currentPage}
+          totalPages={TOTAL_PAGES}
+          onChange={setCurrentPage}
+        />
+      </Box>
+    </Container>
   );
-
-  if (!res.ok) {
-    throw new Error('Falha ao buscar filmes');
-  }
-
-  const data = await res.json();
-  return data;
-}
-
-
-export default async function Home() {
-  const images = await getLatestImages();
-  console.log(images)
-  return <ImageList images={images} />;
 }
