@@ -1,13 +1,12 @@
 import React from 'react';
-import MovieList from './components/MovieList/MovieList';
+import ImageList from './components/ImageList/ImageList';
 
-const TMDB_API_KEY = process.env.TMDB_API_KEY;
-const TMDB_API_BASE_URL = 'https://api.themoviedb.org/3';
+const API_KEY = 'l7UE_2KrGzTtJIY3Q9kzYygrIHUGTcL_9e86b0TB95k'
 
-
-async function getLatestMovies() {
+async function getLatestImages() {
   const res = await fetch(
-    `${TMDB_API_BASE_URL}/movie/now_playing?api_key=${TMDB_API_KEY}&language=pt-BR&page=1`,
+    `https://api.unsplash.com/photos/?client_id=${API_KEY}`,
+
     { next: { revalidate: 60 * 60 } }
   );
 
@@ -16,12 +15,12 @@ async function getLatestMovies() {
   }
 
   const data = await res.json();
-  return data.results;
+  return data;
 }
 
 
 export default async function Home() {
-  const movies = await getLatestMovies();
-  console.log(movies)
-  return <MovieList movies={movies} />;
+  const images = await getLatestImages();
+  console.log(images)
+  return <ImageList images={images} />;
 }
